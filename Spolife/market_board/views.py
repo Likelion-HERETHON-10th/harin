@@ -18,7 +18,7 @@ def create(request):
         post.body = request.POST['body']
         post.date = timezone.now()
         post.author = request.user
-        post.score = request.POST['score']
+        post.price = request.POST['price']
         post.photo = request.FILES['market_photo']
         post.save()
     # 입력을 받을 수 있는 html을 갖다 주기
@@ -32,14 +32,14 @@ def delete(request, post_id):
 
 
 def update(request, post_id):
-    post = get_object_or_404(Review_Post, pk=post_id)
+    post = get_object_or_404(Market_Post, pk=post_id)
     if request.method == 'POST' or request.method == 'FILES':
         # 입력 내용을 DB에 저장
         post.title = request.POST['title']
         post.body = request.POST['body']
-        post.date = timezone()
+        post.date = timezone.now()
         post.author = request.user
-        post.score = request.POST['score']
+        post.price = request.POST['price']
         post.photo = request.FILES['market_photo']
         post.save()
     else:
@@ -47,14 +47,14 @@ def update(request, post_id):
 
 
 def detail(request, post_id):
-    post_detail = get_object_or_404(Review_Post, pk=post_id)
-    comment_form = Review_Comment()
+    post_detail = get_object_or_404(Market_Post, pk=post_id)
+    comment_form = Market_Comment()
     return render(request, 'detail.html', {'post_detail':post_detail, 'comment_form':comment_form})
 
 
 def create_comment(request, post_id):
     if request.method == 'POST':
-        com = Review_Comment()
+        com = Market_Comment()
         com.comment = request.POST['comment']
         com.post = request.user
         com.date = timezone.now()
@@ -63,13 +63,13 @@ def create_comment(request, post_id):
 
 
 def delete_comment(request, post_id, com_id):
-    com = get_object_or_404(Review_Comment, pk=com_id)
+    com = get_object_or_404(Market_Comment, pk=com_id)
     com.delete()
     return redirect('detail', post_id)
 
 
 def update_comment(request, post_id, com_id):
-    com = get_object_or_404(Review_Comment, pk=com_id)
+    com = get_object_or_404(Market_Comment, pk=com_id)
     if request.method == "POST":
         com.comment = request.POST['comment']
         com.post = request.user
